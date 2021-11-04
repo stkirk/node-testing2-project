@@ -7,6 +7,26 @@ server.use(express.json());
 server.get("/", (req, res) => {
   res.status(200).json({ api: "up" });
 });
+const houseAtreides = [
+  { id: 1, name: "Leto Atreides" },
+  { id: 2, name: "Paul Atreides" },
+  { id: 3, name: "Jessica" },
+  { id: 4, name: "Duncan Idaho" },
+  { id: 5, name: "Gurney Halleck" },
+];
+server.get("/api/houses/atreides", (req, res, next) => {
+  res.json(houseAtreides);
+});
+
+server.post("/api/houses/atreides", (req, res, next) => {
+  if (!req.body.name) {
+    next({ status: 422, message: "must include name" });
+  } else {
+    const created = { id: houseAtreides.length - 1, ...req.body };
+    houseAtreides.push(created);
+    res.status(201).json(created);
+  }
+});
 
 server.use("*", (req, res, next) => {
   next({ status: 404, message: "not found" });
