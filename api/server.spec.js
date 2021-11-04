@@ -27,7 +27,7 @@ describe("[GET] /api/houses/atreides", () => {
   });
 });
 
-const hawat = { id: 6, name: "Thufir Hawat" };
+const hawat = { name: "Thufir Hawat" };
 
 describe("[POST] /api/houses/atreides", () => {
   it("responds with 422 if no name in payload", async () => {
@@ -44,5 +44,16 @@ describe("[POST] /api/houses/atreides", () => {
     let res;
     res = await request(server).post("/api/houses/atreides").send(hawat);
     expect(res.body).toMatchObject({ id: 5, ...hawat });
+  });
+});
+
+describe("[DELETE] /api/houses/atreides", () => {
+  it("responds with status code 200", async () => {
+    let res = await request(server).delete("/api/houses/atreides/1");
+    expect(res.status).toBe(200);
+  });
+  it("responds id of record deleted", async () => {
+    let res = await request(server).delete("/api/houses/atreides/1");
+    expect(res.body).toBe("1");
   });
 });

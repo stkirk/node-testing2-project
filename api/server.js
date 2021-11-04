@@ -7,7 +7,7 @@ server.use(express.json());
 server.get("/", (req, res) => {
   res.status(200).json({ api: "up" });
 });
-const houseAtreides = [
+let houseAtreides = [
   { id: 1, name: "Leto Atreides" },
   { id: 2, name: "Paul Atreides" },
   { id: 3, name: "Jessica" },
@@ -25,6 +25,23 @@ server.post("/api/houses/atreides", (req, res, next) => {
     const created = { id: houseAtreides.length - 1, ...req.body };
     houseAtreides.push(created);
     res.status(201).json(created);
+  }
+});
+
+server.delete("/api/houses/atreides/:id", (req, res, next) => {
+  const houseMember = houseAtreides.filter(
+    (member) => member.id == req.params.id
+  );
+  if (!houseMember) {
+    next({
+      status: 422,
+      message: `house member with id: ${req.params.id} does not exist`,
+    });
+  } else {
+    houseAtreides = houseAtreides.filter(
+      (member) => member.id != req.params.id
+    );
+    res.status(200).json(req.params.id);
   }
 });
 
